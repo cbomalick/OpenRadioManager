@@ -10,7 +10,6 @@ class Request {
         } else {
             $connect = new DBConnect();
 
-            //Pull in Service details from SERVICEHEADER table
             $row = $connect->getData("SELECT requestid,artist,song,requestedby,status,createdtime from request WHERE requestid = '$requestId'") or die("Error: Request not found.");
             foreach($row as $row){
                 $this->requestId = $row['requestid'];
@@ -42,7 +41,7 @@ class Request {
         $this->song = $song;
         $this->requestedBy = $name;
         $this->status = "Pending";
-        $this->createdTime = date("m/d/Y g:i a", strtotime($this->CurrentDateTime));
+        $this->createdTime = $CurrentDateTime;
 
         $connect = new DBConnect();
         //TODO: if ($employee->isValid($loggedInEmployee)){ execute } else { error }

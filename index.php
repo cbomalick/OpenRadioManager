@@ -56,7 +56,9 @@ $currentlyLoggedIn = TRUE;
                     include('layout/managesub.inc.php');
                 break;
 
-                case"requestlist":
+                case"playlist":
+                    $playlist = new RequestList();
+                    
                 break;
                 
                 case"staff":

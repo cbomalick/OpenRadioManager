@@ -1,19 +1,25 @@
 <?
 
 class RequestList{
+    private $completeList;
+    private $connect;
 
     public function __construct(){
+        $connect = new DBConnect();
+        $completeList = $connect->getData("SELECT requestid,artist,song,requestedby,status,createdtime from request WHERE status != 'Cancelled' ORDER BY createdtime DESC");
+        $this->completeList = $completeList;
     }
 
     public function __destruct(){
     }
 
     public function printList($status){
-        $connect = new DBConnect();
-        $row = $connect->getData("SELECT requestid from request WHERE status = '$status' ORDER BY createdtime DESC");
-
-        if(!isset($row)){
-            Echo "No requests currently pending";
+        $filteredList = (array_filter($this->completeList, function ($var) {
+            return ($var['status'] == 'Pending');
+        }));
+        
+        if(!isset($filteredList)){
+            Echo "No requests currently available";
             return;
         }
 
@@ -29,7 +35,7 @@ class RequestList{
              </thead>
              <tbody>";
 
-         foreach($row as $row){
+         foreach($filteredList as $row){
              $request = new Request($row['requestid']);
 
              Echo"<tr>

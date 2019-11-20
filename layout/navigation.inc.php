@@ -5,7 +5,7 @@
                         
                         if ($employeeLevel > 0)
                             Echo'<li><a href="?p=requests">Manage Requests</a></li>
-                                <li><a href="?p=requestlist">Request List</a></li>';
+                                <li><a href="?p=playlist">Play List</a></li>';
                         
                         if ($employeeLevel >= 2)
                             Echo'<li><a href="?p=staff">Manage Staff</a></li>';
