@@ -9,6 +9,10 @@ Echo"<div class=\"requestform\">
     </p>
     ";
     $requestList = new RequestList();
-    $requestList->printList('Pending');
+    $filteredList = $requestList->filterList('Pending','2019-11-18','2019-11-20');
+    
+    $filteredList = $requestList->printManageList($filteredList);
+
+    
 Echo"</form></div>";
 ?>

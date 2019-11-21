@@ -57,7 +57,7 @@ $currentlyLoggedIn = TRUE;
                 break;
 
                 case"playlist":
-                    $playlist = new RequestList();
+                    include('layout/playlist.inc.php');
                     
                 break;
                 
