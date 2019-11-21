@@ -73,9 +73,7 @@ class RequestList{
             return;
         }
 
-        var_dump($filteredList);
-        Echo "<br><br>";
-        //Generate HTML table for Play List screen
+        //Generate HTML table for Manage Requests screen
         Echo "<table class=\"table\">
             <thead>
             <tr>
@@ -88,33 +86,17 @@ class RequestList{
             </thead>
             <tbody>";
 
-            $filteredArray = array($filteredList->filteredList);
-            var_dump($filteredArray);
-            Echo "<br><br>";
+         foreach($filteredList as $row){
+             $request = new Request($row['requestid']);
 
-            foreach($filteredArray as $key=>$value){
-                var_dump($key);
-                Echo "<br><br>";
-                var_dump($value);
-                Echo "<br><br>";
-                foreach($value as $row){
-                    var_dump($row);
-                    Echo "<br><br>";
-                }
-
-            //TODO: Figure out how to loop through these and generate table
-            foreach($filteredList as $row){
-                $request = new Request($row['requestid']);
-   
-                Echo"<tr>
+             Echo"<tr>
                     <td>{$request->createdTime}</td>
                     <td>{$request->artist}</td>
                     <td>{$request->song}</td>
                     <td>141</td>
                     <td>13</td>
                 </tr>";
-            }
-        }
+         }
 
          Echo"</tbody>
         </table>";
