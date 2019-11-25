@@ -71,17 +71,17 @@ class RequestList{
     public function printPlayList($inputList){
         //Purpose: Prints list of approved Requests for the Play List screen
 
-        //Filter the inputList and remove any duplicate artist/song pairs
-        $uniqueList = array();
-        foreach($inputList as $subArray){
-            if(!in_multiarray($subArray['artist'], $uniqueList)){
-                $uniqueList[] = $subArray;
-            } elseif(!in_multiarray($subArray['song'], $uniqueList)){
-                $uniqueList[] = $subArray;
-            } 
-                
-                
+        //Accept multiarray, convert to normal array with artist => song
+        $tempArray = array();
+        $filteredList = array();
+
+        foreach($inputList as $row){
+            $tempArray = array([$row['artist'] => $row['song']]);
+            $filteredList = array_merge($filteredList, $tempArray);
         }
+
+        //Remove duplicate artist/song pairs
+        $uniqueList = array_unique($filteredList, SORT_REGULAR);
 
         if(empty($uniqueList)){
             Echo "No requests currently available";
@@ -99,28 +99,27 @@ class RequestList{
             </thead>
             <tbody>";
 
-         foreach($uniqueList as $row){
-             $request = new Request($row['requestid']);
-             $this->artist = $request->artist;
-             $this->song = $request->song;
+            foreach($uniqueList as $row) {
+                foreach($row as $artist => $song) {
+                    $request = new Request("NEW");
+                    $this->artist = $artist;
+                    $this->song = $song;
+            // $mostRecent = date("m/d/Y g:i a", strtotime($mostRecent['createdtime']));
 
-             //Calculate how many times each song has been requested
-             $totalCount = array_count_values(array_column($this->completeList, 'song'))[$request->song];
+            $mostRecent = "";
+            $totalCount = "";
 
-             //Return most recent request date for each song
-             //Change this to just pull from DB using a request.requestMostRecent() function
-            $mostRecent = max(array_filter($this->completeList, function ($var) use (&$mostRecent) {
-                return ($var['artist'] == $this->artist && $var['song'] == $this->song);
-            }));
-            $mostRecent = date("m/d/Y g:i a", strtotime($mostRecent['createdtime']));
+           $totalCount = $request->countTimesRequested($artist,$song);
 
-             Echo"<tr>
-                    <td>{$request->artist}</td>
-                    <td>{$request->song}</td>
+            Echo"<tr>
+                    <td>{$artist}</td>
+                    <td>{$song}</td>
                     <td>{$totalCount}</td>
                     <td>{$mostRecent}</td>
                 </tr>";
-         }
+                }
+            
+            }
 
          Echo"</tbody>
         </table>";

@@ -35,6 +35,19 @@ class DBConnect {
         echo "Error: " . $sql . "<br>" . $con->error;
         }
     }
+
+    public function fetchCount($sql){
+        $query = $this->con->prepare($sql);
+        if(!$query){
+            echo "Prepare failed: (". $this->con->errno.") ".$this->con->error."<br>";
+         }
+         
+        $query->execute();
+        $query->store_result();
+
+        $rows = $query->num_rows;
+        return $rows;
+    }
 }
 
 ?>

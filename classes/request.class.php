@@ -51,5 +51,12 @@ class Request {
         $connect->runQuery($sql);
     }
 
+    public function countTimesRequested($artist,$song){
+        $connect = new DBConnect();
+        //TODO: if ($employee->isValid($loggedInEmployee)){ execute } else { error }
+        $Count = $connect->fetchCount("SELECT * FROM request WHERE artist = '$artist' AND song = '$song' AND status != 'Cancelled'");
+        return $Count;
+    }
+
 }
 ?>
