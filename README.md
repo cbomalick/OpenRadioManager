@@ -15,9 +15,10 @@ Features include
 * * Approved requests are added to Request List for easy tracking
 * Staff management
 * * Three levels of user access
-* * * Level 1 can manage requests
-* * * Level 2 can manage requests and staff
-* * * Level 3 can manage requests, staff, and site details
+* * * Level 1 can view requests
+* * * Level 2 can manage requests
+* * * Level 3 can manage requests and staff
+* * * Level 4 can manage requests, staff, and site details
 * * Password-protected logins generated automatically when adding staff
 
 Installation
