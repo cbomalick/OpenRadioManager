@@ -34,8 +34,8 @@ class RequestList{
     }
 
     public function printManageList($filteredList){
+        //Purpose: Prints list of pending Requests for the Manage Requests screen
         if(empty($filteredList)){
-            //Purpose: Prints list of pending Requests for the Manage Requests screen
             Echo "No requests currently available";
             return;
         }
@@ -68,22 +68,22 @@ class RequestList{
         </table>";
     }
 
-    public function printPlayList($filteredList){
+    public function printPlayList($inputList){
         //Purpose: Prints list of approved Requests for the Play List screen
+
+        //Filter the inputList and remove any duplicate artist/song pairs
         $uniqueList = array();
-        
-        foreach($filteredList as $row){
-            unset($row['requestid'],$row['requestedby'],$row['status'],$row['createdtime']);
-            if (!in_array($row, $uniqueList))
-                {
-                    $uniqueList[] = $row; 
-                } 
+        foreach($inputList as $subArray){
+            if(!in_multiarray($subArray['artist'], $uniqueList)){
+                $uniqueList[] = $subArray;
+            } elseif(!in_multiarray($subArray['song'], $uniqueList)){
+                $uniqueList[] = $subArray;
+            } 
+                
+                
         }
 
-        var_dump($uniqueList);
-        Echo "<br><br>";
-
-        if(empty($filteredList)){
+        if(empty($uniqueList)){
             Echo "No requests currently available";
             return;
         }
@@ -91,7 +91,6 @@ class RequestList{
         Echo "<table class=\"table\">
             <thead>
             <tr>
-            
             <th>Artist</th>
             <th>Song Name</th>
             <th>Times Requested</th>
@@ -99,10 +98,8 @@ class RequestList{
             </tr>
             </thead>
             <tbody>";
-//TODO: Only print uniques
-        //var_dump($filteredList);
 
-         foreach($filteredList as $row){
+         foreach($uniqueList as $row){
              $request = new Request($row['requestid']);
              $this->artist = $request->artist;
              $this->song = $request->song;
@@ -111,6 +108,7 @@ class RequestList{
              $totalCount = array_count_values(array_column($this->completeList, 'song'))[$request->song];
 
              //Return most recent request date for each song
+             //Change this to just pull from DB using a request.requestMostRecent() function
             $mostRecent = max(array_filter($this->completeList, function ($var) use (&$mostRecent) {
                 return ($var['artist'] == $this->artist && $var['song'] == $this->song);
             }));

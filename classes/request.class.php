@@ -10,7 +10,7 @@ class Request {
         } else {
             $connect = new DBConnect();
 
-            $row = $connect->getData("SELECT requestid,artist,song,requestedby,status,createdtime from request WHERE requestid = '$requestId'") or die("Error: Request not found.");
+            $row = $connect->getData("SELECT requestid,artist,song,requestedby,status,createdtime from request WHERE requestid = '$requestId' ORDER BY createdtime") or die("Error: Request not found.");
             foreach($row as $row){
                 $this->requestId = $row['requestid'];
                 $this->artist = $row['artist'];
@@ -50,5 +50,6 @@ class Request {
         ('$this->requestId','$this->artist','$this->song','$this->requestedBy','$this->status','$this->createdTime')";
         $connect->runQuery($sql);
     }
+
 }
 ?>

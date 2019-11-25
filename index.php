@@ -1,6 +1,8 @@
 <?
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
+date_default_timezone_set('America/Chicago');
+$CurrentDateTime = date("Y-m-d H:i:s");
 
 //Import classes
 include('classes/packages.inc.php');
@@ -16,7 +18,6 @@ $stationName = "My Radio Station";
 $stationDescription = "Welcome to My Radio Station! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
 $currentDJ = "Jim Jones";
 $nowPlaying = "Rage Against the Machine - Killing in the Name";
-date_default_timezone_set('America/Chicago');
 
 //User object
 $loggedInEmployee = "John Doe";
