@@ -1,11 +1,14 @@
 <?
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-date_default_timezone_set('America/Chicago');
-$CurrentDateTime = date("Y-m-d H:i:s");
 
 //Import classes
 include('classes/packages.inc.php');
+
+//Establish station variables
+$station = new Station();
+date_default_timezone_set($station->timeZone);
+$CurrentDateTime = date("Y-m-d H:i:s");
 
 if (isset($_GET['p'])) {
 	$page = $_GET['p'];
@@ -13,29 +16,22 @@ if (isset($_GET['p'])) {
 	$page= "";
 }
 
-//Station object
-$stationName = "My Radio Station";
-$stationDescription = "Welcome to My Radio Station! Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.";
-$currentDJ = "Jim Jones";
-$nowPlaying = "Rage Against the Machine - Killing in the Name";
-
 //User object
-$loggedInEmployee = "John Doe";
-$employeeLevel = "2";
+$employeeLevel = "4";
 $currentlyLoggedIn = TRUE;
 
 ?>
 
 <html>
 <head>
-    <title><? Echo $stationName ?></title>
+    <title><? Echo $station->stationName ?></title>
     <link href="css/style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body>
     <div class="container">
         <div class="panel">
-            <h2><? Echo $stationName ?></h2>
+            <h2><? Echo $station->stationName ?></h2>
             <? include('layout/navigation.inc.php'); ?>
             
             <? 
@@ -64,9 +60,12 @@ $currentlyLoggedIn = TRUE;
                 break;
                 
                 case"staff":
+                    include('layout/staff.inc.php');
                 break;
 
                 case"login":
+                    //$loggedInEmployee = new User();
+                    //var_dump($loggedInEmployee);
                 break;
 
                 case"logout":

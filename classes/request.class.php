@@ -65,6 +65,7 @@ class Request {
 
         foreach ($result as $result){
             $createdTime = date("m/d/Y g:i a", strtotime($result['createdtime']));
+            // $mostRecent = date("m/d/Y g:i a", strtotime($mostRecent['createdtime']));
         }
         return $createdTime;
     }

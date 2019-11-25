@@ -12,9 +12,9 @@ body {
 .panel {
 	display: inline-block;
 	padding: 15px;
-    background-color: #FFFFFF;
+  background-color: #FFFFFF;
   box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
-  width: 750px;
+  width: 800px;
   min-height: 400px;
 }
 
@@ -163,6 +163,21 @@ input {
 
 .requestform {
   padding-top: 5px;
+}
+
+.stationstatus {
+  background: #000000;
+  font-weight: bold;
+  padding-right: 2px;
+  padding-left: 2px;
+}
+
+.onair {
+  color: #05ffa1;
+}
+
+.offair {
+  color: #fe5e51;
 }
 
 
