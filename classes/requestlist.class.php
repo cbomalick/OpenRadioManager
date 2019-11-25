@@ -12,7 +12,7 @@ class RequestList{
     public function __construct(){
         //Purpose: Generate a list of all requests. 'Cancelled' is reserved by system to remove a record without a true loss of data
         $connect = new DBConnect();
-        $completeList = $connect->getData("SELECT requestid,artist,song,requestedby,status,createdtime from request WHERE status != 'Cancelled' ORDER BY createdtime DESC");
+        $completeList = $connect->getData("SELECT requestid,artist,song,requestedby,status,createdtime from request WHERE status != 'Cancelled' ORDER BY artist,song,createdtime DESC");
         $this->completeList = $completeList;
     }
 
@@ -86,9 +86,8 @@ class RequestList{
         if(empty($uniqueList)){
             Echo "No requests currently available";
             return;
-        }
-
-        Echo "<table class=\"table\">
+        } else {
+            Echo "<table class=\"table\">
             <thead>
             <tr>
             <th>Artist</th>
@@ -102,27 +101,23 @@ class RequestList{
             foreach($uniqueList as $row) {
                 foreach($row as $artist => $song) {
                     $request = new Request("NEW");
-                    $this->artist = $artist;
-                    $this->song = $song;
-            // $mostRecent = date("m/d/Y g:i a", strtotime($mostRecent['createdtime']));
+                    $totalCount = $request->countTimesRequested($artist,$song);
+                    $mostRecent = $request->fetchLastRequested($artist,$song);
 
-            $mostRecent = "";
-            $totalCount = "";
-
-           $totalCount = $request->countTimesRequested($artist,$song);
-
-            Echo"<tr>
-                    <td>{$artist}</td>
-                    <td>{$song}</td>
-                    <td>{$totalCount}</td>
-                    <td>{$mostRecent}</td>
-                </tr>";
+                    Echo"<tr>
+                            <td>{$artist}</td>
+                            <td>{$song}</td>
+                            <td>{$totalCount}</td>
+                            <td>{$mostRecent}</td>
+                        </tr>";
                 }
-            
             }
 
-         Echo"</tbody>
-        </table>";
+            Echo"</tbody>
+            </table>";
+        }
+
+       
     }
 
     public function updateList($action, $requests,$user){

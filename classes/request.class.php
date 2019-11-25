@@ -58,5 +58,16 @@ class Request {
         return $Count;
     }
 
+    public function fetchLastRequested($artist,$song){
+        $connect = new DBConnect();
+        //TODO: if ($employee->isValid($loggedInEmployee)){ execute } else { error }
+        $result = $connect->getData("SELECT createdtime FROM request WHERE artist = '$artist' AND song = '$song' AND status != 'Cancelled' ORDER BY CREATEDTIME DESC LIMIT 1");
+
+        foreach ($result as $result){
+            $createdTime = date("m/d/Y g:i a", strtotime($result['createdtime']));
+        }
+        return $createdTime;
+    }
+
 }
 ?>
