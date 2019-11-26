@@ -40,14 +40,25 @@ class RequestList{
             return;
         }
 
-        Echo "<table class=\"table\">
+        Echo "
+        <script language=\"JavaScript\">
+        //Select All Checkbox
+        function toggle(source) {
+            checkboxes = document.getElementsByName('selectedrequest[]');
+            for(var i=0, n=checkboxes.length;i<n;i++) {
+                checkboxes[i].checked = source.checked;
+            }
+		}
+        </script>
+
+        <table class=\"table\">
              <thead>
              <tr>
              <th>Created Time</th>
              <th>Artist</th>
              <th>Song Name</th>
              <th>Requested By</th>
-             <th>Select</th>
+             <th><input type=\"checkbox\" onClick=\"toggle(this)\" /></th>
              </tr>
              </thead>
              <tbody>";

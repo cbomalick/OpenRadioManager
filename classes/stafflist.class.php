@@ -23,13 +23,23 @@ class StaffList{
             return;
         }
 
-        Echo "<table class=\"table\">
+        Echo "
+        <script language=\"JavaScript\">
+        //Select All Checkbox
+        function toggle(source) {
+            checkboxes = document.getElementsByName('selectedrequest[]');
+            for(var i=0, n=checkboxes.length;i<n;i++) {
+                checkboxes[i].checked = source.checked;
+            }
+		}
+        </script>
+        <table class=\"table\">
              <thead>
              <tr>
              <th>Name</th>
              <th>Hire Date</th>
              <th>Role</th>
-             <th>Select</th>
+             <th><input type=\"checkbox\" onClick=\"toggle(this)\" /></th>
              </tr>
              </thead>
              <tbody>";
@@ -38,7 +48,7 @@ class StaffList{
              $staff = new Staff($row['staffid']);
 
              Echo"<tr>
-                 <td>{$staff->lastName}, {$staff->firstName}</td>
+                 <td><a href=\"?p=view&id={$staff->staffId}\" class=\"clickable\">{$staff->lastName}, {$staff->firstName}</a></td>
                  <td>{$staff->hireDate}</td>
                  <td>{$staff->role}</td>
                  <td><input type=\"checkbox\" name=\"selectedrequest[]\" value=\"{$staff->staffId}\" class=\"checkbox\"></td>

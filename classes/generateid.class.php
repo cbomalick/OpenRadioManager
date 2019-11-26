@@ -13,6 +13,11 @@ class IdNumber {
         $ID = strtoupper(''.$prefix.'-'.$ID.'');
         return $ID;
     }
+
+    public function generatePasswordString(){
+        $ID = $this->random_text('numeric', 32);
+        return $ID;
+    }
         
     public function random_text($type, $length)
     {

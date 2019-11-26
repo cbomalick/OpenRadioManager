@@ -19,6 +19,7 @@ if (isset($_GET['p'])) {
 //User object
 $employeeLevel = "4";
 $currentlyLoggedIn = TRUE;
+$loggedInEmployee = "John Smith";
 
 ?>
 
@@ -63,12 +64,37 @@ $currentlyLoggedIn = TRUE;
                     include('layout/staff.inc.php');
                 break;
 
+                case"station":
+                    
+                break;
+
+                case"view":
+                    
+                break;
+
+                case"addstaff":
+                    include('layout/addstaff.inc.php');
+                break;
+
+                case"addstaffsub":
+                    include('layout/addstaffsub.inc.php');
+                break;
+
+                case"verify":
+                    include('layout/verify.inc.php');
+                break;
+
+                case"verifysub":
+                    include('layout/verifysub.inc.php');
+                break;
+
                 case"login":
                     //$loggedInEmployee = new User();
                     //var_dump($loggedInEmployee);
                 break;
 
                 case"logout":
+                    
                 break;
             
             }

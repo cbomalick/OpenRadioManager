@@ -30,6 +30,18 @@ body {
   color: #6c717f;
 }
 
+.panel select {
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 4px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+  color: #6c717f;
+}
+
 h2 {
 	font-weight: bold;
 	border-bottom: 1px solid #E6E6E6;
@@ -178,6 +190,22 @@ input {
 
 .offair {
   color: #fe5e51;
+}
+
+.clickable {
+  font-weight: bold;
+  color: #0e82db;
+  text-decoration: none;
+}
+
+.clickable:hover {
+  font-weight: bold;
+  color: #189bff;
+}
+
+.requiredfield {
+	color: red;
+	font-weight: bold;
 }
 
 

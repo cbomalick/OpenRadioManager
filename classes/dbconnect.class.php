@@ -41,10 +41,8 @@ class DBConnect {
         if(!$query){
             echo "Prepare failed: (". $this->con->errno.") ".$this->con->error."<br>";
          }
-         
         $query->execute();
         $query->store_result();
-
         $rows = $query->num_rows;
         return $rows;
     }

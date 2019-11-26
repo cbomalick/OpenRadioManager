@@ -12,11 +12,12 @@ class Station {
 
     public function __construct(){
 		$connect = new DBConnect();
-        $row = $connect->getData("SELECT name,description,timezone FROM station WHERE status = 'Active'") or die("Error: Station not found.");
+        $row = $connect->getData("SELECT name,description,timezone,webaddress FROM station WHERE status = 'Active'") or die("Error: Station not found.");
         foreach($row as $row){
             $this->stationName = $row['name'];
             $this->stationDescription = $row['description'];
             $this->timeZone = $row['timezone'];
+            $this->webAddress = $row['webaddress'];
         }
 
         
