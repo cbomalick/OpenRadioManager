@@ -85,15 +85,14 @@ class RequestList{
         //Accept multiarray, convert to normal array with artist => song
         $tempArray = array();
         $filteredList = array();
-
         foreach($inputList as $row){
             $tempArray = array([$row['artist'] => $row['song']]);
             $filteredList = array_merge($filteredList, $tempArray);
         }
 
-        //Remove duplicate artist/song pairs
-        $uniqueList = array_unique($filteredList, SORT_REGULAR);
-
+        //Removes duplicates from filteredList
+        $uniqueList = array_map('unserialize', array_unique(array_map('serialize', $filteredList)));
+        
         if(empty($uniqueList)){
             Echo "No requests currently available";
             return;
@@ -123,12 +122,9 @@ class RequestList{
                         </tr>";
                 }
             }
-
             Echo"</tbody>
             </table>";
         }
-
-       
     }
 
     public function updateList($action, $requests,$user){

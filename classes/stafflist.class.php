@@ -50,7 +50,7 @@ class StaffList{
              Echo"<tr>
                  <td><a href=\"?p=view&id={$staff->staffId}\" class=\"clickable\">{$staff->lastName}, {$staff->firstName}</a></td>
                  <td>{$staff->hireDate}</td>
-                 <td>{$staff->userLevel}</td>
+                 <td>{$staff->userRole}</td>
                  <td><input type=\"checkbox\" name=\"selectedrequest[]\" value=\"{$staff->staffId}\" class=\"checkbox\"></td>
              </tr>";
          }

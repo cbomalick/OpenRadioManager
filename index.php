@@ -70,7 +70,6 @@ if(isset($_SESSION['loggedin'])){
 
                 case"playlist":
                     include('layout/playlist.inc.php');
-                    
                 break;
                 
                 case"staff":
@@ -110,6 +109,7 @@ if(isset($_SESSION['loggedin'])){
                 break;
 
                 case"resetpwsub":
+                    //When new PW is requested, expire any existing request hashes that are not already Used
                 break;
                 
                 case"auth":

@@ -27,6 +27,15 @@ class Staff {
             $this->hireDate = date("m/d/Y", strtotime($row['hiredate']));
             $this->userLevel = $row['userlevel'];
             $this->currentlyLoggedIn = TRUE;
+
+            $role = array(
+                0 => "Public",
+                1 => "DJ",
+                2 => "Supervisor",
+                3 => "Manager",
+                4 => "Owner",
+             );
+            $this->userRole = $role[$this->userLevel];
         }
     }
 
@@ -109,6 +118,26 @@ class Staff {
         
     }
 
+    public function lockStaff($staffId,$loggedInEmployee){
+        $CurrentDateTime = date("Y-m-d H:i:s");
+
+        $connect = new DBConnect();
+        //TODO: if ($employee->isValid($loggedInEmployee)){ execute } else { error }
+        //Revoke account access
+        $sql = "UPDATE accounts SET status = 'Locked', lastmodifieddate = '$CurrentDateTime', lastmodifiedby = '$loggedInEmployee' WHERE staffid = '$staffId'";
+        $connect->runQuery($sql);
+    }
+
+    public function unlockStaff($staffId,$loggedInEmployee){
+        $CurrentDateTime = date("Y-m-d H:i:s");
+
+        $connect = new DBConnect();
+        //TODO: if ($employee->isValid($loggedInEmployee)){ execute } else { error }
+        //Revoke account access
+        $sql = "UPDATE accounts SET status = 'Active', lastmodifieddate = '$CurrentDateTime', lastmodifiedby = '$loggedInEmployee' WHERE staffid = '$staffId'";
+        $connect->runQuery($sql);
+    }
+
     public function deactivateStaff($staffId,$loggedInEmployee){
         $CurrentDateTime = date("Y-m-d H:i:s");
 
@@ -121,6 +150,10 @@ class Staff {
         //Revoke account access
         $sql = "UPDATE accounts SET status = 'InActive', lastmodifieddate = '$CurrentDateTime', lastmodifiedby = '$loggedInEmployee' WHERE staffid = '$staffId'";
         $connect->runQuery($sql);
+    }
+
+    public function isValid($loggedInEmployee){
+    return true;
     }
 }
 
