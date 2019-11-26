@@ -2,6 +2,8 @@
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
+session_start();
+
 //Import classes
 include('classes/packages.inc.php');
 
@@ -17,8 +19,17 @@ if (isset($_GET['p'])) {
 }
 
 //User object
-$employeeLevel = "4";
-$currentlyLoggedIn = TRUE;
+$currentlyLoggedIn = FALSE;
+$userLevel = 0;
+if(isset($_SESSION['loggedin'])){
+    if (isset($_SESSION['id'])){
+        $loggedInUser = new Staff($_SESSION['id']);
+        $currentlyLoggedIn = $loggedInUser->currentlyLoggedIn;
+        $userLevel = $loggedInUser->userLevel;
+        $loggedInName = $loggedInUser->fullName;
+} 
+}
+
 $loggedInEmployee = "John Smith";
 
 ?>
@@ -38,7 +49,11 @@ $loggedInEmployee = "John Smith";
             <? 
             switch($page){
                 default:
-                    include('layout/content.inc.php');    
+                    include('layout/content.inc.php');
+                    Echo "<br><br>";
+
+
+
                     include('layout/requestform.inc.php'); 
                 break;
 
@@ -89,12 +104,18 @@ $loggedInEmployee = "John Smith";
                 break;
 
                 case"login":
-                    //$loggedInEmployee = new User();
-                    //var_dump($loggedInEmployee);
+                    include('layout/login.inc.php');
+                break;
+
+                case"auth":
+                    include('layout/auth.inc.php');
                 break;
 
                 case"logout":
-                    
+                    session_start();
+                    session_destroy();
+                    header('Location: index.html');
+                    exit();
                 break;
             
             }

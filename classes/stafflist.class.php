@@ -26,7 +26,7 @@ class StaffList{
         Echo "
         <script language=\"JavaScript\">
         //Select All Checkbox
-        function toggle(source) {
+            function toggle(source) {
             checkboxes = document.getElementsByName('selectedrequest[]');
             for(var i=0, n=checkboxes.length;i<n;i++) {
                 checkboxes[i].checked = source.checked;
@@ -50,7 +50,7 @@ class StaffList{
              Echo"<tr>
                  <td><a href=\"?p=view&id={$staff->staffId}\" class=\"clickable\">{$staff->lastName}, {$staff->firstName}</a></td>
                  <td>{$staff->hireDate}</td>
-                 <td>{$staff->role}</td>
+                 <td>{$staff->userLevel}</td>
                  <td><input type=\"checkbox\" name=\"selectedrequest[]\" value=\"{$staff->staffId}\" class=\"checkbox\"></td>
              </tr>";
          }

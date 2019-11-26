@@ -7,7 +7,8 @@ class Staff {
     public $lastName;
     public $email;
     public $hireDate;
-    public $role;
+    public $userLevel;
+    public $currentlyLoggedIn;
 
     public function __construct($staffId){
         if($staffId == "NEW"){
@@ -21,9 +22,11 @@ class Staff {
             $this->staffId = $row['staffid'];
             $this->firstName = $row['firstname'];
             $this->lastName = $row['lastname'];
+            $this->fullName = $this->firstName . " " . $this->lastName;
             $this->email = $row['email'];
             $this->hireDate = date("m/d/Y", strtotime($row['hiredate']));
-            $this->role = $row['userlevel'];
+            $this->userLevel = $row['userlevel'];
+            $this->currentlyLoggedIn = TRUE;
         }
     }
 
