@@ -15,6 +15,6 @@
                 <option value="3">Manager</option>
                 <option value="4">Owner</option>
             </select></p>
-        <button class="actionbutton request" type="submit" name="submit" id="submit">Submit Request</button>
+        <button class="actionbutton request" type="submit" name="submit" id="submit">Add Staff</button>
     </form>
 </div>

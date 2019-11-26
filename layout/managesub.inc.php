@@ -14,7 +14,7 @@
     if($button == "approve") {
         $action = "approve";
         $requestList = new RequestList();
-        $requestList->updateList($action, $requests,$loggedInEmployee);
+        $requestList->updateList($action, $requests,$loggedInName);
         
         Echo "<script type=\"text/javascript\">
         window.location.href = \"?p=requests\";
@@ -23,7 +23,7 @@
     } else if ($button == "reject"){
         $action = "reject";
         $requestList = new RequestList();
-        $requestList->updateList($action, $requests,$loggedInEmployee);
+        $requestList->updateList($action, $requests,$loggedInName);
 
         Echo "<script type=\"text/javascript\">
         window.location.href = \"?p=requests\";

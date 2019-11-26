@@ -72,10 +72,8 @@ class Staff {
         $headers = 'From: noreply@scrillas.com' . "\r\n" .
             'Reply-To: noreply@scrillas.com' . "\r\n" .
             'X-Mailer: PHP/' . phpversion();
-        
         mail($to, $subject, $message, $headers);
-        
-        
+
         Echo"<div class=\"requestform\">
             <h2>Add Staff</h2>
                 <p style=\"text-align: center;\">Account created for {$firstName} {$lastName}</p>
@@ -109,6 +107,20 @@ class Staff {
         $sql = "UPDATE accounts set password = '$newPassword', forcereset = 'N', lastmodifiedby = 'John Doe', lastmodifieddate = '$CurrentDateTime' WHERE email = '$email' AND status ='Active'";
         $connect->runQuery($sql);
         
+    }
+
+    public function deactivateStaff($staffId,$loggedInEmployee){
+        $CurrentDateTime = date("Y-m-d H:i:s");
+
+        $connect = new DBConnect();
+        //TODO: if ($employee->isValid($loggedInEmployee)){ execute } else { error }
+        //Remove employee profile
+        $sql = "UPDATE staff SET status = 'InActive', lastmodifieddate = '$CurrentDateTime', lastmodifiedby = '$loggedInEmployee' WHERE staffid = '$staffId'";
+        $connect->runQuery($sql);
+
+        //Revoke account access
+        $sql = "UPDATE accounts SET status = 'InActive', lastmodifieddate = '$CurrentDateTime', lastmodifiedby = '$loggedInEmployee' WHERE staffid = '$staffId'";
+        $connect->runQuery($sql);
     }
 }
 

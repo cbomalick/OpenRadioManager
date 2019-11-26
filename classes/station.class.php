@@ -9,15 +9,20 @@ class Station {
     public $nowPlaying;
     public $onAir;
     private $staffLoggedIn;
+    private $domain;
+    private $installPath;
+    public $webAddress;
 
     public function __construct(){
 		$connect = new DBConnect();
-        $row = $connect->getData("SELECT name,description,timezone,webaddress FROM station WHERE status = 'Active'") or die("Error: Station not found.");
+        $row = $connect->getData("SELECT name,description,timezone,webaddress,domain,installpath FROM station WHERE status = 'Active'") or die("Error: Station not found.");
         foreach($row as $row){
             $this->stationName = $row['name'];
             $this->stationDescription = $row['description'];
             $this->timeZone = $row['timezone'];
-            $this->webAddress = $row['webaddress'];
+            $this->domain = $row['domain'];
+            $this->installPath = $row['installpath'];
+            $this->webAddress = $this->domain . "/" . $this->installPath;
         }
 
         

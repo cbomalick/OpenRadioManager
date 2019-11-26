@@ -18,20 +18,21 @@ if (isset($_GET['p'])) {
 	$page= "";
 }
 
-//User object
+//If not logged in, user access level is 0
 $currentlyLoggedIn = FALSE;
 $userLevel = 0;
+$welcomeLine = "";
+
+//If logged in, pull access rights from staff profile
 if(isset($_SESSION['loggedin'])){
     if (isset($_SESSION['id'])){
         $loggedInUser = new Staff($_SESSION['id']);
         $currentlyLoggedIn = $loggedInUser->currentlyLoggedIn;
         $userLevel = $loggedInUser->userLevel;
         $loggedInName = $loggedInUser->fullName;
-} 
+        $welcomeLine = "<p style=\"text-align:right;\">Welcome {$loggedInName}</p>";
+    } 
 }
-
-$loggedInEmployee = "John Smith";
-
 ?>
 
 <html>
@@ -43,17 +44,14 @@ $loggedInEmployee = "John Smith";
 <body>
     <div class="container">
         <div class="panel">
-            <h2><? Echo $station->stationName ?></h2>
-            <? include('layout/navigation.inc.php'); ?>
+            <?
+            Echo"<h2>{$station->stationName}</h2>";
+            Echo $welcomeLine;
+            include('layout/navigation.inc.php'); 
             
-            <? 
             switch($page){
                 default:
                     include('layout/content.inc.php');
-                    Echo "<br><br>";
-
-
-
                     include('layout/requestform.inc.php'); 
                 break;
 
@@ -80,11 +78,11 @@ $loggedInEmployee = "John Smith";
                 break;
 
                 case"station":
-                    
+                    include('layout/station.inc.php');
                 break;
 
-                case"view":
-                    
+                case"viewstaff":
+                    include('layout/viewstaff.inc.php');
                 break;
 
                 case"addstaff":
@@ -107,17 +105,16 @@ $loggedInEmployee = "John Smith";
                     include('layout/login.inc.php');
                 break;
 
+                case"resetpw":
+                    include('layout/resetpw.inc.php');
+                break;
+
+                case"resetpwsub":
+                break;
+                
                 case"auth":
                     include('layout/auth.inc.php');
                 break;
-
-                case"logout":
-                    session_start();
-                    session_destroy();
-                    header('Location: index.html');
-                    exit();
-                break;
-            
             }
             ?>
 
