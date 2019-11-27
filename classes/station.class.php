@@ -8,9 +8,9 @@ class Station {
     public $currentDJ;
     public $nowPlaying;
     public $onAir;
-    private $staffLoggedIn;
-    private $domain;
-    private $installPath;
+    public $staffLoggedIn;
+    public $domain;
+    public $installPath;
     public $webAddress;
 
     public function __construct(){

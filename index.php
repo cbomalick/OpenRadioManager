@@ -92,6 +92,10 @@ if(isset($_SESSION['loggedin'])){
                     include('layout/addstaffsub.inc.php');
                 break;
 
+                case"unlockstaffsub":
+                    include('layout/unlockstaffsub.inc.php');
+                break;
+
                 case"verify":
                     include('layout/verify.inc.php');
                 break;

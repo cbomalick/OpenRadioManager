@@ -8,7 +8,7 @@ if(!empty($_POST["firstName"]) && !empty($_POST["lastName"]) && !empty($_POST["e
     $userLevel = htmlentities($_POST["userLevel"], ENT_QUOTES);
     
     $newRequest = new Staff("NEW");
-    $newRequest->addNewStaff($firstName,$lastName,$email,$hireDate,$userLevel);
+    $newRequest->addNewStaff($firstName,$lastName,$email,$hireDate,$userLevel,$loggedInName);
     
 
 }

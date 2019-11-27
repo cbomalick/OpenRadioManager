@@ -2,6 +2,8 @@
 $connect = new DBConnect();
 $con = $connect->connectDB();
 
+$staff = new Staff("NEW");
+
 //Verify username and password were submitted
 if (!isset($_POST['email'], $_POST['password'])){
 	die ('Username and/or password does not exist!');
@@ -25,16 +27,19 @@ if ($stmt = $con->prepare("SELECT staffid,email,password,userlevel FROM accounts
                 window.location.href = \"index.php\";
                 </script>";
 			//AuditLog('Logged In','Desktop Login',$employeeid);
+			$staff->unlockStaff($staffId);
 			exit();
 		} else {
 			Echo "<p style=\"text-align: center;\">Incorrect username and/or password</p>";
 			//$Username = FilterInput($_POST['email']);
 			//AuditLog('Failed Login','Incorrect Password Attempted',$Username);
+			$staff->threeStrikes($email,"Incorrect Password Attempted");
 		}
 	} else {
 		Echo "<p style=\"text-align: center;\">Incorrect username and/or password</p>";
 			//$Username = FilterInput($_POST['email']);
 			//AuditLog('Failed Login','Incorrect Username Attempted',$Username);
+			$staff->threeStrikes($_POST['email'],"Incorrect Username Attempted");
 	}
 	$stmt->close();
 } else {

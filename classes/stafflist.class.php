@@ -39,6 +39,7 @@ class StaffList{
              <th>Name</th>
              <th>Hire Date</th>
              <th>Role</th>
+             <th>Status</th>
              <th><input type=\"checkbox\" onClick=\"toggle(this)\" /></th>
              </tr>
              </thead>
@@ -51,32 +52,14 @@ class StaffList{
                  <td><a href=\"?p=view&id={$staff->staffId}\" class=\"clickable\">{$staff->lastName}, {$staff->firstName}</a></td>
                  <td>{$staff->hireDate}</td>
                  <td>{$staff->userRole}</td>
-                 <td><input type=\"checkbox\" name=\"selectedrequest[]\" value=\"{$staff->staffId}\" class=\"checkbox\"></td>
+                 <td>{$staff->status}</td>
+                 <td><input type=\"checkbox\" name=\"selectedstaff[]\" value=\"{$staff->staffId}\" class=\"checkbox\"></td>
              </tr>";
          }
 
          Echo"</tbody>
         </table>";
     }
-
-    // public function updateStaff($action,$staff,$user){
-    //     //Purpose: Updates array of $requests to the provided status ($action)
-    //     if($action == "approve") {
-    //         $status = "Approved";
-    //     } else if ($action == "reject"){
-    //         $status = "Rejected";
-    //     } else if ($action == "cancel"){
-    //         $status = "Cancelled";
-    //     } else{
-    //         Echo "Invalid Status";
-    //         return;
-    //     }
-
-    //     foreach ($staff as $result) {
-    //         $request = new Request($result);
-    //         $request->updateRequestStatus($request->requestId,$status,$user);
-    //     } 
-    // }
 }
 
 ?>
