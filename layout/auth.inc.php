@@ -9,9 +9,11 @@ if (!isset($_POST['email'], $_POST['password'])){
 	die ('Username and/or password does not exist!');
 }
 
+$email = htmlentities($_POST['email'], ENT_QUOTES);
+
 //Match submitted details to database
 if ($stmt = $con->prepare("SELECT staffid,email,password,userlevel FROM accounts WHERE email = ? AND status = 'Active'")){
-	$stmt->bind_param('s',$_POST['email']);
+	$stmt->bind_param('s',$email);
 	$stmt->execute(); 
 	$stmt->store_result(); 
 	if ($stmt->num_rows > 0){
@@ -39,7 +41,7 @@ if ($stmt = $con->prepare("SELECT staffid,email,password,userlevel FROM accounts
 		Echo "<p style=\"text-align: center;\">Incorrect username and/or password</p>";
 			//$Username = FilterInput($_POST['email']);
 			//AuditLog('Failed Login','Incorrect Username Attempted',$Username);
-			$staff->threeStrikes($_POST['email'],"Incorrect Username Attempted");
+			$staff->threeStrikes($email,"Incorrect Username Attempted");
 	}
 	$stmt->close();
 } else {

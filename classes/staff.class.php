@@ -88,7 +88,7 @@ class Staff {
         $headers = "From: noreply@{$station->domain}" . "\r\n" .
             "Reply-To: noreply@{$station->domain}" . "\r\n" .
             "X-Mailer: PHP/" . phpversion();
-        // mail($to, $subject, $message, $headers);
+        mail($to, $subject, $message, $headers);
 
         Echo"<div class=\"requestform\">
             <h2>Add Staff</h2>
@@ -123,6 +123,36 @@ class Staff {
         $sql = "UPDATE accounts set password = '$newPassword', forcereset = 'N', lastmodifiedby = '$loggedInName', lastmodifieddate = '$CurrentDateTime' WHERE email = '$email' AND status ='Active'";
         $connect->runQuery($sql);
         
+    }
+
+    public function staffForgotPassword($staffId){
+        $CurrentDateTime = date("Y-m-d H:i:s");
+        $ipAddress = $_SERVER['REMOTE_ADDR'];
+        $ID = new IdNumber;
+        $connect = new DBConnect();
+
+        //Expire any previous password requests
+        $this->expireAllResets();
+        
+        //Generates a 32-character number and then hashes with md5
+        //User gets an email with the number, and the hash is stored in the DB
+        //Verification checks the hash of the number in email link. If it matches, password can be set
+        $verificationString = $ID->generatePasswordString();
+        $hashString = md5($verificationString);
+        $sql = "INSERT INTO password_change_requests 
+        (email,time,hashstring,ipaddress) VALUES 
+        ('$this->email','$CurrentDateTime','$hashString','$ipAddress')";
+        $connect->runQuery($sql);
+
+        //Send verification email
+        $station = new Station();
+        $to = $this->email;
+        $subject = "{$station->stationName} - Password Reset Request Received";
+        $message = "A password reset has been requested for your {$station->stationName} account by {$ipAddress}. Please use the link below to verify your account and set your new password. \n \n http://{$station->webAddress}/?p=verify&e={$this->email}&v={$verificationString} \n \n If you did not request this change you can ignore this email.";
+        $headers = "From: noreply@{$station->domain}" . "\r\n" .
+            "Reply-To: noreply@{$station->domain}" . "\r\n" .
+            "X-Mailer: PHP/" . phpversion();
+        mail($to, $subject, $message, $headers);
     }
 
     public function threeStrikes($email,$reason){
@@ -191,6 +221,13 @@ class Staff {
 
         //Revoke account access
         $sql = "UPDATE accounts SET status = 'InActive', lastmodifieddate = '$CurrentDateTime', lastmodifiedby = '$loggedInEmployee' WHERE staffid = '$staffId'";
+        $connect->runQuery($sql);
+    }
+
+    public function expireAllResets(){
+        //When a new password is requested, expire any previously requested hashes that haven't been used
+        $connect = new DBConnect();
+        $sql = "UPDATE password_change_requests SET status = 'Used' WHERE email = '$this->email'";
         $connect->runQuery($sql);
     }
 

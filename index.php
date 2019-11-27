@@ -80,6 +80,10 @@ if(isset($_SESSION['loggedin'])){
                     include('layout/station.inc.php');
                 break;
 
+                case"stationsub":
+                    include('layout/stationsub.inc.php');
+                break;
+
                 case"viewstaff":
                     include('layout/viewstaff.inc.php');
                 break;
@@ -113,7 +117,7 @@ if(isset($_SESSION['loggedin'])){
                 break;
 
                 case"resetpwsub":
-                    //When new PW is requested, expire any existing request hashes that are not already Used
+                    include('layout/resetpwsub.inc.php');
                 break;
                 
                 case"auth":

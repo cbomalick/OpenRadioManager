@@ -11,4 +11,4 @@
     $staffList = new StaffList();
     $staffList->printStaffList($staffList->completeList);
 ?>
-</div>
+</form></div>

@@ -11,9 +11,9 @@ $staff = new Staff("NEW");
         <input name=\"verificationKey\" id=\"verificationKey\" value=\"$verificationKey\" hidden>
         <input name=\"verificationEmail\" id=\"verificationEmail\" value=\"$verificationEmail\" hidden>
         <p class=\"header\">New Password</p>
-            <p><input name=\"newpass1\" id=\"newpass1\" value=\"\"></p>
+            <p><input type=\"password\" name=\"newpass1\" id=\"newpass1\" value=\"\"></p>
         <p class=\"header\">Confirm New Password</p>
-            <p><input name=\"newpass2\" id=\"newpass2\" value=\"\"></p>
+            <p><input type=\"password\" name=\"newpass2\" id=\"newpass2\" value=\"\"></p>
         <button class=\"actionbutton request\" type=\"submit\" name=\"submit\" id=\"submit\">Change Password</button>
     </form>";
     } else {
