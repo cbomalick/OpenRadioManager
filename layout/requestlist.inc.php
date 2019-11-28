@@ -1,4 +1,6 @@
 <?
+$loggedInUser->checkPagePermission(2);
+
 Echo"<div class=\"requestform\">
     <h2>Manage Requests</h2>
     <form form method=\"post\" action=\"?p=msub\">

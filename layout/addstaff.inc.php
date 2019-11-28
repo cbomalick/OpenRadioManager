@@ -1,3 +1,6 @@
+<? 
+$loggedInUser->checkPagePermission(3);
+?>
 <div class="requestform">
     <form form method="post" action="?p=addstaffsub">
         <h2>Add New Staff</h2>
@@ -9,12 +12,23 @@
             <p><input name="email" id="email" value=""></p>
         <p class="header">Role</p>
             <p>
-            <select name="userLevel" id="userLevel">
-                <option value="1">DJ</option>
-                <option value="2">Supervisor</option>
-                <option value="3">Manager</option>
-                <option value="4">Owner</option>
-            </select></p>
+                <select name="userLevel" id="userLevel">
+                <?
+                $role = array(
+                    1 => "DJ",
+                    2 => "Supervisor",
+                    3 => "Manager",
+                    4 => "Owner",
+                );
+
+                foreach($role as $key => $value){
+                    if($key <= $userLevel){
+                        Echo "<option value=\"{$key}\">{$value}</option>";
+                    }
+                }
+                ?>
+                </select>
+            </p>
         <button class="actionbutton request" type="submit" name="submit" id="submit">Add Staff</button>
     </form>
 </div>

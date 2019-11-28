@@ -12,7 +12,7 @@ class StaffList{
     public function __construct(){
         //Purpose: Generate a list of all staff. 'Cancelled' is reserved by system to remove a record without a true loss of data
         $connect = new DBConnect();
-        $completeList = $connect->getData("SELECT * from staff WHERE status != 'Cancelled' ORDER BY lastname,firstname");
+        $completeList = $connect->getData("SELECT * from staff WHERE status NOT IN ('Cancelled','InActive') ORDER BY lastname,firstname");
         $this->completeList = $completeList;
     }
 
@@ -49,7 +49,7 @@ class StaffList{
              $staff = new Staff($row['staffid']);
 
              Echo"<tr>
-                 <td><a href=\"?p=view&id={$staff->staffId}\" class=\"clickable\">{$staff->lastName}, {$staff->firstName}</a></td>
+                 <td><a href=\"?p=viewstaff&id={$staff->staffId}\" class=\"clickable\">{$staff->lastName}, {$staff->firstName}</a></td>
                  <td>{$staff->hireDate}</td>
                  <td>{$staff->userRole}</td>
                  <td>{$staff->status}</td>

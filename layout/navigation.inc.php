@@ -8,7 +8,10 @@
                         }
                         
                         if ($userLevel >= 2){
-                            Echo'<li><a href="?p=requests">Manage Requests</a></li>';    
+                            Echo'<li><a href="?p=requests">Manage Requests</a></li>'; 
+                        }
+
+                        if ($userLevel >= 3){
                             Echo'<li><a href="?p=staff">Manage Staff</a></li>';
                         }
 

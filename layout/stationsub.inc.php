@@ -4,7 +4,7 @@ if(!empty($_POST["stationName"]) && !empty($_POST["timeZone"]) && !empty($_POST[
     $station = new Station();
 
     $stationName = htmlentities($_POST['stationName'], ENT_QUOTES);
-    $stationDescription = nl2br(htmlentities($_POST['stationDescription'], ENT_QUOTES));
+    $stationDescription = htmlentities($_POST['stationDescription'], ENT_QUOTES);
     $timeZone = htmlentities($_POST['timeZone'], ENT_QUOTES);
     $domain = htmlentities($_POST['domain'], ENT_QUOTES);
     $installPath = htmlentities($_POST['installPath'], ENT_QUOTES);
@@ -15,6 +15,10 @@ if(!empty($_POST["stationName"]) && !empty($_POST["timeZone"]) && !empty($_POST[
         <h2>Manage Station</h2>
             <p style=\"text-align: center;\">Station changes have been saved.</p>
         </div>";
+
+    Echo "<script type=\"text/javascript\">
+    window.location.href = \"?p=station\";
+    </script>";
 } else {
     Echo"<div class=\"requestform\">
         <h2>Manage Station</h2>

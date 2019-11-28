@@ -1,4 +1,6 @@
-
+<?
+$loggedInUser->checkPagePermission(3);
+?>
 <div class="requestform">
 <h2>Manage Staff</h2>
 <form form method="post" action="?p=unlockstaffsub">

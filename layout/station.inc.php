@@ -1,4 +1,5 @@
 <?
+$loggedInUser->checkPagePermission(4);
 $station = new Station();
 
 Echo"

@@ -1,4 +1,6 @@
 <?
+$loggedInUser->checkPagePermission(1);
+
 Echo"<div class=\"requestform\">
     <h2>Play List</h2>";
 

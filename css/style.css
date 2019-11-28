@@ -88,6 +88,11 @@ ul {
   width: 100%;
 }
 
+.request {
+  background: #AB8BD9;
+  width: 100%;
+}
+
 .request:hover,.button:active,.button:focus {
   background: #8861BF;
 }
@@ -108,6 +113,15 @@ ul {
 
 .reject:hover,.button:active,.button:focus {
   background: #ea88f4;
+}
+
+.delete {
+  background: #fa1c78;
+  width: 100%;
+}
+
+.delete:hover,.button:active,.button:focus {
+  background: #d61766;
 }
 
 input {

@@ -18,10 +18,7 @@ if (isset($_GET['p'])) {
 	$page= "";
 }
 
-//If not logged in, user access level is 0
-$currentlyLoggedIn = FALSE;
-$userLevel = 0;
-$welcomeLine = "";
+
 
 //If logged in, pull access rights from staff profile
 if(isset($_SESSION['loggedin'])){
@@ -32,6 +29,11 @@ if(isset($_SESSION['loggedin'])){
         $loggedInName = $loggedInUser->fullName;
         $welcomeLine = "<p style=\"text-align:right;\">Welcome {$loggedInName}</p>";
     } 
+} else {
+    //If not logged in, user access level is 0
+    $currentlyLoggedIn = FALSE;
+    $userLevel = 0;
+    $welcomeLine = "";
 }
 ?>
 
@@ -88,6 +90,10 @@ if(isset($_SESSION['loggedin'])){
                     include('layout/viewstaff.inc.php');
                 break;
 
+                case"viewstaffsub":
+                    include('layout/viewstaffsub.inc.php');
+                break;
+
                 case"addstaff":
                     include('layout/addstaff.inc.php');
                 break;
@@ -98,6 +104,10 @@ if(isset($_SESSION['loggedin'])){
 
                 case"unlockstaffsub":
                     include('layout/unlockstaffsub.inc.php');
+                break;
+
+                case"deletestaffsub":
+                    include('layout/deletestaffsub.inc.php');
                 break;
 
                 case"verify":

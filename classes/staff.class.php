@@ -147,7 +147,7 @@ class Staff {
         //Send verification email
         $station = new Station();
         $to = $this->email;
-        $subject = "{$station->stationName} - Password Reset Request Received";
+        $subject = "{$station->stationName} - Forgot your {$station->stationName} password?";
         $message = "A password reset has been requested for your {$station->stationName} account by {$ipAddress}. Please use the link below to verify your account and set your new password. \n \n http://{$station->webAddress}/?p=verify&e={$this->email}&v={$verificationString} \n \n If you did not request this change you can ignore this email.";
         $headers = "From: noreply@{$station->domain}" . "\r\n" .
             "Reply-To: noreply@{$station->domain}" . "\r\n" .
@@ -233,6 +233,21 @@ class Staff {
 
     public function isValid($loggedInEmployee){
     return true;
+    }
+
+    public function checkPagePermission($checkLevel){
+
+        if($this->userLevel < $checkLevel){
+            Echo "Error: Insufficient access rights<br /></br />If problem persists, please contact your system administrator";
+            exit;
+        }
+
+    }
+
+    public function staffUpdateDetails($firstName,$lastName,$email,$hireDate,$userLevel){
+        $connect = new DBConnect();
+        $sql = "UPDATE staff SET firstname = '$firstName', lastname = '$lastName', email = '$email', hiredate = '$hireDate', userlevel = '$userLevel' WHERE staffid = '$this->staffId'";
+        $connect->runQuery($sql);
     }
 }
 
