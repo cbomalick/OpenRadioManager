@@ -27,7 +27,7 @@ class StaffList{
         <script language=\"JavaScript\">
         //Select All Checkbox
             function toggle(source) {
-            checkboxes = document.getElementsByName('selectedrequest[]');
+            checkboxes = document.getElementsByName('selectedstaff[]');
             for(var i=0, n=checkboxes.length;i<n;i++) {
                 checkboxes[i].checked = source.checked;
             }

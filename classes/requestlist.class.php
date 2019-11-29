@@ -26,9 +26,11 @@ class RequestList{
         $this->endDate = $endDate;
 
         //Create a filtered array of requests matching the provided $status
-        $this->filteredList = (array_filter($this->completeList, function ($var) use (&$filteredList) {
-            return ($var['status'] == $this->status && $var['createdtime'] >= $this->startDate  &&  $var['createdtime'] <= $this->endDate);
-        }));
+        if(!empty($this->filteredList)){
+            $this->filteredList = (array_filter($this->completeList, function ($var) use (&$filteredList) {
+                return ($var['status'] == $this->status && $var['createdtime'] >= $this->startDate  &&  $var['createdtime'] <= $this->endDate);
+            }));
+        }
 
         return $this->filteredList;
     }
@@ -85,9 +87,11 @@ class RequestList{
         //Accept multiarray, convert to normal array with artist => song
         $tempArray = array();
         $filteredList = array();
-        foreach($inputList as $row){
-            $tempArray = array([$row['artist'] => $row['song']]);
-            $filteredList = array_merge($filteredList, $tempArray);
+        if(!empty($inputList)){
+            foreach($inputList as $row){
+                $tempArray = array([$row['artist'] => $row['song']]);
+                $filteredList = array_merge($filteredList, $tempArray);
+            }
         }
 
         //Removes duplicates from filteredList
