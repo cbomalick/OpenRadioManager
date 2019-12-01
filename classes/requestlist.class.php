@@ -26,7 +26,7 @@ class RequestList{
         $this->endDate = $endDate;
 
         //Create a filtered array of requests matching the provided $status
-        if(!empty($this->filteredList)){
+        if(!empty($this->completeList)){
             $this->filteredList = (array_filter($this->completeList, function ($var) use (&$filteredList) {
                 return ($var['status'] == $this->status && $var['createdtime'] >= $this->startDate  &&  $var['createdtime'] <= $this->endDate);
             }));
