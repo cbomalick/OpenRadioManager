@@ -3,9 +3,9 @@
 class DBConnect {
 
     private $host = "localhost";
-    private $user = "vinemano_radio";
-    private $password = "DKKz.r*h)Glc";
-    private $database = "vinemano_radio";
+    private $user = "**REPLACE_USER**";
+    private $password = "**REPLACE_PASSWORD**";
+    private $database = "**REPLACE_DB**";
     private $con;
     
     public function __construct() {

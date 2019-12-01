@@ -3,8 +3,6 @@
 // ini_set('display_errors', 1);
 $CurrentDateTime = date("Y-m-d H:i:s");
 
-include('classes/packages.inc.php');
-
 if (isset($_GET['p'])) {
 	$page = $_GET['p'];
 } else {
@@ -55,11 +53,11 @@ if (isset($_GET['p'])) {
                         </select>
                     </p>
                     <p class=\"header\">MySQL Database Name <span class=\"requiredfield\">*</span></p>
-                        <p><input name=\"sqlDatabase\" id=\"sqlDatabase\" value=\"vinemano_radio\"></p>
+                        <p><input name=\"sqlDatabase\" id=\"sqlDatabase\" value=\"\"></p>
                     <p class=\"header\">MySQL Username <span class=\"requiredfield\">*</span></p>
-                        <p><input name=\"sqlUser\" id=\"sqlUser\" value=\"vinemano_radio\"></p>
+                        <p><input name=\"sqlUser\" id=\"sqlUser\" value=\"\"></p>
                     <p class=\"header\">MySQL Password <span class=\"requiredfield\">*</span></p>
-                        <p><input name=\"sqlPass\" id=\"sqlPass\" value=\"DKKz.r*h)Glc\"></p>
+                        <p><input name=\"sqlPass\" id=\"sqlPass\" value=\"\"></p>
                 <p class=\"header\">Domain <span class=\"requiredfield\">*</span></p>
                     <p><input name=\"domain\" id=\"domain\" value=\"{$CurrentURL}\"></p>
                 <p class=\"header\">Installation Path <span class=\"requiredfield\">*</span></p>
@@ -96,6 +94,22 @@ if (isset($_GET['p'])) {
                     }
                     else {
                     echo "Connection confirmed. <br />";
+
+                    //Write database login to file
+                    $dbPath = "classes/dbconnect.class.php";
+
+                    $updateFile = file_get_contents($dbPath);
+                    $updateFile = str_replace("**REPLACE_USER**", "$sqlUser",$updateFile);
+                    file_put_contents($dbPath, $updateFile);
+
+                    $updateFile = file_get_contents($dbPath);
+                    $updateFile = str_replace("**REPLACE_PASSWORD**", "$sqlPass",$updateFile);
+                    file_put_contents($dbPath, $updateFile);
+
+                    $updateFile = file_get_contents($dbPath);
+                    $updateFile = str_replace("**REPLACE_DB**", "$sqlDatabase",$updateFile);
+                    file_put_contents($dbPath, $updateFile);
+                    
                     //Create tables
                     $sqlTables = "CREATE TABLE `accounts` (
                         `id` int(11) NOT NULL,
@@ -215,12 +229,15 @@ if (isset($_GET['p'])) {
                         exit;
                     }
 
+                    include('classes/packages.inc.php');
+
                     while ($mysqli->next_result()) {;}
                     //Create admin user
                     $staff = new Staff("NEW");
                     $staff->addNewStaff($firstName,$lastName,$email,$CurrentDateTime,4,'Installation');
                 
                     Echo"Setup complete";
+                    unlink(basename($_SERVER['PHP_SELF'])) or die("Couldn't delete file");
                     }
                     Echo "<script type=\"text/javascript\">
                     window.location.href = \"index.php\";
