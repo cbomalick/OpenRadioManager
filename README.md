@@ -8,24 +8,24 @@ Features include
 * * Provides a ready-made web page for your station
 * * Station name, timezone and request-page content can be controlled through Manage Station screen
 
-* Request management
-* * Songs can be requested by any visitor
-* * Requests can be Approved or Rejected by Supervisor, Manager, and Owner roles
-* * Approved requests are added to a Request List where last request date and number of times requested can be viewed
+Request management
+* Songs can be requested by any visitor
+* Requests can be Approved or Rejected by Supervisor, Manager, and Owner roles
+* Approved requests are added to a Request List where last request date and number of times requested can be viewed
 
-* Staff management
-* * Four levels of user access
-* * * DJ can view requests
-* * * Supervisor can manage requests
-* * * Manager can manage requests and staff
-* * * Owner can manage requests, staff, and station details
-* * Users with insufficient permissions are blocked from accessing screens above their level, even when going to the URL directly
-* * Users with Staff Management ability can only edit or delete accounts of their level and below
-* * Password-protected logins are generated automatically when adding staff
-* * * Credentials are immediately hashed and are never transmitted via email or stored in plaintext
-* * Forgot Password feature can be used if a user is unable to login. If the account exists, they will receive an email with a reset link
-* * User accounts automatically become locked after 3 failed login attempts. Unlock must be performed by Manager or Owner roles
-* * * Password reset requests automatically expire after 24 hours
+Staff management
+* Four levels of user access
+* * DJ can view requests
+* * Supervisor can manage requests
+* * Manager can manage requests and staff
+* * Owner can manage requests, staff, and station details
+* Users with insufficient permissions are blocked from accessing screens above their level, even when going to the URL directly
+* Users with Staff Management ability can only edit or delete accounts of their level and below
+* Password-protected logins are generated automatically when adding staff
+* * Credentials are immediately hashed and are never transmitted via email or stored in plaintext
+* Forgot Password feature can be used if a user is unable to login. If the account exists, they will receive an email with a reset link
+* User accounts automatically become locked after 3 failed login attempts. Unlock must be performed by Manager or Owner roles
+* * Password reset requests automatically expire after 24 hours
 
 Installation
 * Installation is completed by using the Installation Wizard

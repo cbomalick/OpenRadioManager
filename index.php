@@ -18,8 +18,6 @@ if (isset($_GET['p'])) {
 	$page= "";
 }
 
-
-
 //If logged in, pull access rights from staff profile
 if(isset($_SESSION['loggedin'])){
     if (isset($_SESSION['id'])){
