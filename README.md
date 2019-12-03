@@ -4,9 +4,9 @@ OpenRadioManager is an open source tool to help online radio stations manage the
 View a live demo at http://scrillas.com/projects/OpenRadioManager/
 
 Features include
-* Web Portal
-* * Provides a ready-made web page for your station
-* * Station name, timezone and request-page content can be controlled through Manage Station screen
+Web Portal
+* Provides a ready-made web page for your station
+* Station name, timezone and request-page content can be controlled through Manage Station screen
 
 Request management
 * Songs can be requested by any visitor
