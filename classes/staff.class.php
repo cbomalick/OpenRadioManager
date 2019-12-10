@@ -5,12 +5,12 @@ class Staff {
     public $staffId;
     public $firstName;
     public $lastName;
-    public $email;
+    private $email;
     public $hireDate;
     public $userLevel;
     public $currentlyLoggedIn;
     public $status;
-    public $loggedInName;
+    private $loggedInName;
 
     public function __construct($staffId){
         if($staffId == "NEW"){
@@ -236,7 +236,7 @@ class Staff {
     }
 
     public function checkPagePermission($checkLevel){
-
+    //Can be inserted in any page to verify that user has access. If they do not, they cannot access the screen/section
         if($this->userLevel < $checkLevel){
             Echo "Error: Insufficient access rights<br /></br />If problem persists, please contact your system administrator";
             exit;
@@ -245,6 +245,7 @@ class Staff {
     }
 
     public function staffUpdateDetails($firstName,$lastName,$email,$hireDate,$userLevel){
+    //Updates staff details when View Staff screen is saved
         $connect = new DBConnect();
         $sql = "UPDATE staff SET firstname = '$firstName', lastname = '$lastName', email = '$email', hiredate = '$hireDate', userlevel = '$userLevel' WHERE staffid = '$this->staffId'";
         $connect->runQuery($sql);
