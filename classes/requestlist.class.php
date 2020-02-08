@@ -11,8 +11,13 @@ class RequestList{
 
     public function __construct(){
         //Purpose: Generate a list of all requests. 'Cancelled' is reserved by system to remove a record without a true loss of data
-        $connect = new DBConnect();
-        $completeList = $connect->getData("SELECT requestid,artist,song,requestedby,status,createdtime from request WHERE status != 'Cancelled' ORDER BY artist,song,createdtime DESC");
+        $this->connect = DBConnect::getInstance()->getConnection();
+
+        $sql = "SELECT requestid,artist,song,requestedby,status,createdtime from request WHERE status != 'Cancelled' ORDER BY artist,song,createdtime DESC";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute();
+        $completeList = $stmt->fetchAll();
+
         $this->completeList = $completeList;
     }
 

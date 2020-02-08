@@ -5,7 +5,7 @@ class Staff {
     public $staffId;
     public $firstName;
     public $lastName;
-    private $email;
+    public $email;
     public $hireDate;
     public $userLevel;
     public $currentlyLoggedIn;
@@ -13,13 +13,17 @@ class Staff {
     private $loggedInName;
 
     public function __construct($staffId){
+        $this->connect = DBConnect::getInstance()->getConnection();
+        
         if($staffId == "NEW"){
             return;
-        } else {
-        $connect = new DBConnect();
         }
 
-        $row = $connect->getData("SELECT * from staff WHERE staffid = '$staffId' AND status != 'Cancelled' ORDER BY lastname,firstname") or die("Error: Staff not found.");
+        $sql = "SELECT * from staff WHERE staffid = ? AND status != 'Cancelled' ORDER BY lastname,firstname";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$staffId]);
+        $row = $stmt->fetchAll();
+        
         foreach($row as $row){
             $this->staffId = $row['staffid'];
             $this->firstName = $row['firstname'];
@@ -58,27 +62,31 @@ class Staff {
         $this->createdDate = $CurrentDateTime;
 
         //Insert staff in database
-        $connect = new DBConnect();
         //TODO: if ($employee->isValid($loggedInEmployee)){ execute } else { error }
         $sql = "INSERT INTO staff 
         (staffid,firstname,lastname,email,hiredate,userlevel,status,createdby,createddate) VALUES 
-        ('$this->staffId','$this->firstName','$this->lastName','$this->email','$this->hireDate','$this->userLevel','$this->status','$loggedInName','$this->createdDate')";
-        $connect->runQuery($sql);
+        (?,?,?,?,?,?,?,?,?)";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$this->staffId, $this->firstName, $this->lastName, $this->email, $this->hireDate, $this->userLevel, $this->status, $loggedInName, $this->createdDate]);
 
         $sql = "INSERT INTO accounts 
         (staffid,email,userlevel,status,createdby,createddate) VALUES 
-        ('$this->staffId','$this->email','$this->userLevel','$this->status','$loggedInName','$this->createdDate')";
-        $connect->runQuery($sql);
+        (?,?,?,?,?,?)";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$this->staffId, $this->email, $this->userLevel, $this->status, $loggedInName, $this->createdDate]);
     
         //Generates a 32-character number and then hashes with md5
         //User gets an email with the number, and the hash is stored in the DB
         //Verification checks the hash of the number in email link. If it matches, password can be set
         $verificationString = $ID->generatePasswordString();
         $hashString = md5($verificationString);
+
         $sql = "INSERT INTO password_change_requests 
         (email,time,hashstring,ipaddress) VALUES 
-        ('$this->email','$CurrentDateTime','$hashString','$ipAddress')";
-        $connect->runQuery($sql);
+        (?,?,?,?)";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$this->email, $CurrentDateTime, $hashString, $ipAddress]);
+
 
         //Send verification email
         $station = new Station();
@@ -97,11 +105,15 @@ class Staff {
     }
 
     public function staffPasswordVerify($email,$key){
-        $connect = new DBConnect();
         $hashString = md5($key);
 
-        $sql = "SELECT seqno FROM password_change_requests WHERE email = '$email' AND status != 'Used' AND hashstring = '$hashString' AND time >= now() - INTERVAL 1 DAY";
-        if($connect->fetchCount($sql) == 1){
+        $sql = "SELECT COUNT(seqno) FROM password_change_requests WHERE email = ? AND status != 'Used' AND hashstring = ? AND time >= now() - INTERVAL 1 DAY";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$email, $hashString]);
+        $row = $stmt->fetchAll();
+
+        $sql = "";
+        if($row == 1){
             return true;
         } else {
             return false;
@@ -114,22 +126,21 @@ class Staff {
         $hashString = md5($key);
         $CurrentDateTime = date("Y-m-d H:i:s");
 
-        $connect = new DBConnect();
         //Mark reset key as Used
-        $sql = "UPDATE password_change_requests set status = 'Used' WHERE email = '$email' AND status != 'Used' AND hashstring = '$hashString'";
-        $connect->runQuery($sql);
+        $sql = "UPDATE password_change_requests set status = 'Used' WHERE email = ? AND status != 'Used' AND hashstring = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$email, $hashString]);
 
         //Update password
-        $sql = "UPDATE accounts set password = '$newPassword', forcereset = 'N', lastmodifiedby = '$loggedInName', lastmodifieddate = '$CurrentDateTime' WHERE email = '$email' AND status ='Active'";
-        $connect->runQuery($sql);
-        
+        $sql = "UPDATE accounts set password = ?, forcereset = 'N', lastmodifiedby = ?, lastmodifieddate = ? WHERE email = ? AND status ='Active'";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$newPassword, $loggedInName, $CurrentDateTime, $email]);
     }
 
     public function staffForgotPassword($staffId){
         $CurrentDateTime = date("Y-m-d H:i:s");
         $ipAddress = $_SERVER['REMOTE_ADDR'];
         $ID = new IdNumber;
-        $connect = new DBConnect();
 
         //Expire any previous password requests
         $this->expireAllResets();
@@ -139,10 +150,12 @@ class Staff {
         //Verification checks the hash of the number in email link. If it matches, password can be set
         $verificationString = $ID->generatePasswordString();
         $hashString = md5($verificationString);
+
         $sql = "INSERT INTO password_change_requests 
         (email,time,hashstring,ipaddress) VALUES 
-        ('$this->email','$CurrentDateTime','$hashString','$ipAddress')";
-        $connect->runQuery($sql);
+        (?,?,?,?)";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$this->email, $CurrentDateTime, $hashString, $ipAddress]);
 
         //Send verification email
         $station = new Station();
@@ -159,20 +172,27 @@ class Staff {
         //User accounts will become locked if incorrect login is attempted 3x without success
         $CurrentDateTime = date("Y-m-d H:i:s");
         $ipAddress = $_SERVER['REMOTE_ADDR'];
-        $connect = new DBConnect();
         $interval = 30;
 
         $sql = "INSERT INTO failed_login 
         (email,reason,createdtime,ip,status) VALUES 
-        ('$email','$reason','$CurrentDateTime','$ipAddress','Active')";
-        $connect->runQuery($sql);
+        (?,?,?,?,'Active')";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$email, $reason, $CurrentDateTime, $ipAddress]);
 
         //Pull in staffid associated with email
-        $staffRow = $connect->getData("SELECT staffid FROM staff WHERE email = '$email'");
+        $sql = "SELECT staffid FROM staff WHERE email = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$email]);
+        $staffRow = $stmt->fetch();
         $staffId = $staffRow[0]["staffid"];
 
         //Get count of failed attempts. If more than 3, lock account
-        $strikes = $connect->fetchCount("SELECT seqno FROM failed_login WHERE email = '$email' AND status = 'Active' AND createdtime  <= now() - INTERVAL $interval MINUTE");
+        $sql = "SELECT COUNT(seqno) FROM failed_login WHERE email = ? AND status = 'Active' AND createdtime  <= now() - INTERVAL ? MINUTE";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$email, $interval]);
+        $strikes = $stmt->fetch();
+
         $staff = new Staff($staffId);
         if($strikes > 3){
             $staff->lockStaff($staffId);
@@ -183,52 +203,56 @@ class Staff {
     public function lockStaff($staffId){
         $CurrentDateTime = date("Y-m-d H:i:s");
 
-        $connect = new DBConnect();
         //TODO: if ($employee->isValid($loggedInEmployee)){ execute } else { error }
         //Revoke account access
-        $sql = "UPDATE accounts SET status = 'Locked' WHERE staffid = '$staffId'";
-        $connect->runQuery($sql);
+        $sql = "UPDATE accounts SET status = 'Locked' WHERE staffid = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$staffId]);
 
-        $sql = "UPDATE staff SET status = 'Locked' WHERE staffid = '$staffId'";
-        $connect->runQuery($sql);
+        $sql = "UPDATE staff SET status = 'Locked' WHERE staffid = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$staffId]);
     }
 
     public function unlockStaff($staffId){
         $CurrentDateTime = date("Y-m-d H:i:s");
 
-        $connect = new DBConnect();
         //TODO: if ($employee->isValid($loggedInEmployee)){ execute } else { error }
         //Give back account access
-        $sql = "UPDATE accounts SET status = 'Active' WHERE staffid = '$staffId'";
-        $connect->runQuery($sql);
+        $sql = "UPDATE accounts SET status = 'Active' WHERE staffid = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$staffId]);
 
         $sql = "UPDATE staff SET status = 'Active' WHERE staffid = '$staffId'";
-        $connect->runQuery($sql);
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$staffId]);
 
         $staff = new Staff($staffId);
-        $sql = "UPDATE failed_login SET status = 'Expired' WHERE email = '$staff->email' AND status = 'Active'";
-        $connect->runQuery($sql);
+        $sql = "UPDATE failed_login SET status = 'Expired' WHERE email = ? AND status = 'Active'";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$staff->email]);
     }
 
     public function deactivateStaff($staffId,$loggedInEmployee){
         $CurrentDateTime = date("Y-m-d H:i:s");
 
-        $connect = new DBConnect();
         //TODO: if ($employee->isValid($loggedInEmployee)){ execute } else { error }
         //Remove employee profile
-        $sql = "UPDATE staff SET status = 'InActive', lastmodifieddate = '$CurrentDateTime', lastmodifiedby = '$loggedInEmployee' WHERE staffid = '$staffId'";
-        $connect->runQuery($sql);
+        $sql = "UPDATE staff SET status = 'InActive', lastmodifieddate = ?, lastmodifiedby = ? WHERE staffid = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$CurrentDateTime, $loggedInEmployee, $staffId]);
 
         //Revoke account access
-        $sql = "UPDATE accounts SET status = 'InActive', lastmodifieddate = '$CurrentDateTime', lastmodifiedby = '$loggedInEmployee' WHERE staffid = '$staffId'";
-        $connect->runQuery($sql);
+        $sql = "UPDATE accounts SET status = 'InActive', lastmodifieddate = ?, lastmodifiedby = ? WHERE staffid = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$CurrentDateTime, $loggedInEmployee, $staffId]);
     }
 
     public function expireAllResets(){
         //When a new password is requested, expire any previously requested hashes that haven't been used
-        $connect = new DBConnect();
-        $sql = "UPDATE password_change_requests SET status = 'Used' WHERE email = '$this->email'";
-        $connect->runQuery($sql);
+        $sql = "UPDATE password_change_requests SET status = 'Used' WHERE email = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$this->email]);
     }
 
     public function isValid($loggedInEmployee){
@@ -246,9 +270,9 @@ class Staff {
 
     public function staffUpdateDetails($firstName,$lastName,$email,$hireDate,$userLevel){
     //Updates staff details when View Staff screen is saved
-        $connect = new DBConnect();
-        $sql = "UPDATE staff SET firstname = '$firstName', lastname = '$lastName', email = '$email', hiredate = '$hireDate', userlevel = '$userLevel' WHERE staffid = '$this->staffId'";
-        $connect->runQuery($sql);
+        $sql = "UPDATE staff SET firstname = ?, lastname = ?, email = ?, hiredate = ?, userlevel = ? WHERE staffid = ?";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute([$firstName, $lastName, $email, $hireDate, $userLevel, $this->staffId]);
     }
 }
 

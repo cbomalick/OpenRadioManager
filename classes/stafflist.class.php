@@ -11,8 +11,12 @@ class StaffList{
 
     public function __construct(){
         //Purpose: Generate a list of all staff. 'Cancelled' is reserved by system to remove a record without a true loss of data
-        $connect = new DBConnect();
-        $completeList = $connect->getData("SELECT * from staff WHERE status NOT IN ('Cancelled','InActive') ORDER BY lastname,firstname");
+        $this->connect = DBConnect::getInstance()->getConnection();
+
+        $sql = "SELECT * from staff WHERE status NOT IN ('Cancelled','InActive') ORDER BY lastname,firstname";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute();
+        $completeList = $stmt->fetchAll();
         $this->completeList = $completeList;
     }
 

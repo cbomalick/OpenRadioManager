@@ -14,8 +14,12 @@ class Station {
     public $webAddress;
 
     public function __construct(){
-		$connect = new DBConnect();
-        $row = $connect->getData("SELECT name,description,timezone,domain,installpath FROM station WHERE status = 'Active'") or die(mysqli_error($connect));
+        $this->connect = DBConnect::getInstance()->getConnection();
+        $sql = "SELECT name,description,timezone,domain,installpath FROM station WHERE status = 'Active'";
+        $stmt = $this->connect->prepare($sql);
+        $stmt->execute();
+        $row = $stmt->fetchAll();
+        
         foreach($row as $row){
             $this->stationName = $row['name'];
             $this->stationDescription = $row['description'];
@@ -39,10 +43,9 @@ class Station {
 
     public function stationUpdateDetails($stationName,$stationDescription,$timeZone,$domain,$installPath){
         //Purpose: Updates the station details as given in Manage Station screen
-        $connect = new DBConnect();
-
-        $sql = "UPDATE station SET name = '$stationName', description = '$stationDescription', timezone = '$timeZone', domain = '$domain', installpath = '$installPath' WHERE status = 'Active'";
-        $connect->runQuery($sql);
+        $sql = "UPDATE station SET name = ?, description = ?, timezone = ?, domain = ?, installpath = ? WHERE status = 'Active'";
+            $stmt = $this->connect->prepare($sql);
+            $stmt->execute([$stationName, $stationDescription, $timeZone, $domain, $installPath]);
     }
 
     public function generateTimeZoneDropdown($timeZone){

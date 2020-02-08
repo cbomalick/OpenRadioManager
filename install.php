@@ -96,7 +96,7 @@ if (isset($_GET['p'])) {
                     echo "Connection confirmed. <br />";
 
                     //Write database login to file
-                    $dbPath = "classes/dbconnect.class.php";
+                    $dbPath = "classes/config.ini";
 
                     $updateFile = file_get_contents($dbPath);
                     $updateFile = str_replace("**REPLACE_USER**", "$sqlUser",$updateFile);
